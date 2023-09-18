@@ -14,7 +14,7 @@ Your application is required to implement the following functionalities:
 - a `Server`, created using Express (no alternatives will be accepted for this assignment)
 - a `Results` functionality which shows all data associated with a logged in user (except passwords)
 - a `Form/Entry` functionality which allows users to add, modify, and delete data items (must be all three!) associated with their user name / account. 
-- Persistent data storage in between server sessions using [mongodb](https://www.mongodb.com/cloud/atlas) (you *must* use mongodb for this assignment).
+- Persistent data storage in between server sessions using [mongodb](https://www.mongodb.com/cloud/atlas) (you *must* use mongodb for this assignment). You can use either the [official mongodb node.js library](https://www.npmjs.com/package/mongodb) or use the [Mongoose library](https://www.npmjs.com/package/mongoose), which enables you to define formal schemas for your database. Please be aware that the course staff cannot provide in-depth support for use of Mongoose.  
 - Use of a [CSS framework or template](https://github.com/troxler/awesome-css-frameworks). 
 This should do the bulk of your styling/CSS for you and be appropriate to your application. 
 For example, don't use [NES.css](https://nostalgic-css.github.io/NES.css/) (which is awesome!) unless you're creating a game or some type of retro 80s site.
