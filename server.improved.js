@@ -1,9 +1,5 @@
 const http = require( "http" ),
     fs   = require( "fs" ),
-    // IMPORTANT: you must run `npm install` in the directory for this assignment
-    // to install the mime library if you"re testing this on your local machine.
-    // However, Glitch will install it automatically by looking in your package.json
-    // file.
     mime = require( "mime" ),
     dir  = "public/",
     port = 3000
@@ -44,67 +40,6 @@ const handlePut = function(request, response){
         }
         })
 }
-// ————————————————————————————————————————————————————
-// const express = require('express');
-// const bodyParser = require('body-parser');
-//
-// const app = express();
-// app.use(bodyParser.json());
-//
-// // 假设appdata是定义在其他地方的数组
-//
-// app.put('/update/:index', (req, res) => {
-//     // 检查请求方法是否是PUT
-//     if (req.method !== 'PUT') {
-//         return res.status(405).json({ error: 'Method Not Allowed' });
-//     }
-//
-//     const indexToUPdata = parseInt(req.params.index);
-//     const inputData = req.body;
-//
-//     if (indexToUPdata >= 0 && indexToUPdata < appdata.length) {
-//         appdata[indexToUPdata] = inputData;
-//         const currentYear = new Date().getFullYear();
-//         appdata[indexToUPdata].age = currentYear - appdata[indexToUPdata].year;
-//         res.status(200).json({ message: 'Data updated successfully' });
-//     } else {
-//         res.status(400).json({ error: 'Invalid index' });
-//     }
-// });
-//
-// //————————————————————————————————————————————
-//
-// const express = require('express'),
-//     app = express(),
-//     dreams = [];
-//
-// const middleware_put = (req, res, next) => {
-//     let dataString = ''
-//
-//     req.on('data', function(data){
-//         dataString += data;
-//     })
-//     req.on('end', function(){
-//         const inputData = JSON.parse(dataString);
-//         const indexToUPdate= inputData.index;
-//
-//         if (indexToUPdate>= 0 && indexToUPdate < appdata.length) {
-//             appdata[indexToUPdate] = inputData.data;
-//             const currentYear = new Date().getFullYear();
-//             appdata[indexToUPdate].age = currentYear - appdata[indexToUPdate].year;
-//         }
-//     })
-// }
-
-// app.use(middleware_put)
-//
-// app.put('/update/',(req,res)=>{
-//     res.writeHead( 200, { 'Content-Type': 'application/json'})
-//     res.end( req.json )
-// })
-
-//_________________________________
-
 const handleDelete = function( request, response ) {
     let dataString = "";
 
@@ -197,4 +132,3 @@ const sendFile = function( response, filename ) {
 }
 
 server.listen( process.env.PORT || port )
-//app.listen( process.env.PORT || 3000 )
