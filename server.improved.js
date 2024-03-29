@@ -14,17 +14,10 @@ const path = require('path')
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-const dreams = [];
-// const middleware_get = (req,res,next)=> {
-//     req.on("data", function () {
-//
-//     });
-//     req.on("end", function () {
-//         next();
-//         });
-// }
-//
-// app.use(middleware_get);
+
+
+
+//show the table
 app.get('/result', (req, res) => {
     const currentYear = new Date().getFullYear();
     appdata.forEach(item => {
@@ -34,9 +27,30 @@ app.get('/result', (req, res) => {
     res.end(JSON.stringify(appdata))
 });
 
-app.post('/', (req, res) => {
-    res.end('Hello World!');
+///submit name
+const names = [];
+const middleware_post = (req, res, next ) => {
+    let dataString = '';
+
+    req.on('data', function(data){
+        dataString += data;
+    })
+    req.on('end', function (){
+        const json = JSON.parse(dataString)
+        names.push(json)
+        req.json = JSON.stringify(names)
+        next();
+    })
+}
+
+app.use(middleware_post);
+
+app.post('/submit', (req, res) => {
+    res.writeHead( 200, { 'Content-Type': 'application/json'})
+    res.end( req.json )
+    console.log(names);
 });
+
 app.put('/', (req, res) => {
     res.send('Hello World!');
 });

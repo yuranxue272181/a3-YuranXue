@@ -3,10 +3,6 @@
 
 const submit = async function( event ) {
   if (confirm("Do you want to submit your name?")) {
-    // stop form submission from trying to load
-    // a new .html page for displaying results...
-    // this was the original browser behavior and still
-    // remains to this day
     event.preventDefault()
 
     const input = document.querySelector("#yourname"),
