@@ -1,0 +1,83 @@
+.grid-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px
+}
+#left{
+  padding-left: 10px;
+}
+#right{
+  padding-right: 10px;
+}
+
+body {
+  background:black;
+  color:white;
+  font-family: "Tahoma";
+}
+
+h1{
+
+  color: #7cfc00;
+  font-style: oblique;
+  font-family: "Century", sans-serif;
+
+}
+
+input{
+  background-color: #000000;
+  border-color: #FFFFFF;
+  color:#7cfc00;
+}
+#yourname{
+  margin-top: 6px;
+  background-color: #FFFFFF;
+  color: #808080;
+}
+#model{
+  margin-top: 6px;
+  margin-bottom: 3px;
+  background-color: #FFFFFF;
+  color: #808080;
+}
+#year{
+  margin-bottom: 3px;
+  background-color: #FFFFFF;
+  color: #808080;
+}
+#mpg{
+  background-color: #FFFFFF;
+  color: #808080;
+}
+
+button{
+  background-color: #000000;
+  border-color: #FFFFFF;
+  color:#7cfc00;
+}
+
+p{
+  font-size: 15px;
+  border-radius: 5px;
+  border: solid #55E6D8;
+  padding: 7px;
+
+}
+
+table{
+
+  border-color: white;
+  border-collapse: collapse;
+}
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+/* 表格内容样式 */
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}

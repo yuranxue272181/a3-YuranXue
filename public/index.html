@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Car Club</title>
+  <meta charset="utf-8">
+  <script src="js/main.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- get rid of favicon error -->
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<h1>Welcome to our Car Club!</h1>
+<p>Feel free to join our community by submitting your name!<br>
+  Explore our comprehensive table detailing all the vital information about cars. Additionally, you have the power to contribute by posting new car entries, updating existing ones, or even removing outdated information. Share your car details with us and let's enrich our automotive knowledge together!</p>
+<div class = "grid-container" id="left">
+  <div class = "right-content" id="right">
+<form id = "myForm">
+  <thread>Your Name</thread><br>
+  <input type="text" id="yourname" value="your name here">
+  <button id="submitBtn">Submit</button><br>
+  <br>
+  <div1>
+    <thread>Car Information</thread><br>
+    <input type="text" id="model" value="your car's model"><br>
+    <input type="text" id="year" value="your car's year"><br>
+    <input type="text" id="mpg" value="your car's mpg">
+    <button id="addCar">Add </button><br>
+  </div1>
+</form>
+  </div>
+  <div class = "left-content">
+<table width = "600">
+  <thead></thead>
+  <tr>
+    <th>Model</th>
+    <th>Year</th>
+    <th>MPG</th>
+    <th>Age</th>
+    <th>Delete</th>
+    <th>Update</th>
+  </tr>
+  <tbody id = "tbMain"></tbody>
+</table>
+  </div>
+<script>
+
+
+  const result = async function( ) {
+    event.preventDefault()
+    await fetch( '/public/index.html', {
+      method:"GET",
+    }).then(
+            function(response){
+              return response.text()
+            }) .then(function (data){
+      dataArray = (JSON.parse(data))
+      console.log(dataArray)
+    })
+
+    const tbody = document.getElementById('tbMain');
+
+    for(let i = 0; i < dataArray.length; i++){
+      const trow = getDataRow(dataArray[i]);
+      tbody.appendChild(trow);
+    }
+    function getDataRow(h) {
+      const row = document.createElement('tr');
+
+      const modelCell = document.createElement('td');
+      modelCell.innerHTML = h.model;
+      row.appendChild(modelCell);
+
+      const yearCell = document.createElement('td');
+      yearCell.innerHTML = h.year;
+      row.appendChild(yearCell);
+
+      const mpgCell = document.createElement('td');
+      mpgCell.innerHTML = h.mpg;
+      row.appendChild(mpgCell);
+
+      const ageCell = document.createElement('td');
+      ageCell.innerHTML = h.age;
+      row.appendChild(ageCell);
+
+      const delCell = document.createElement('td');
+      row.appendChild(delCell);
+      const btnDel = document.createElement('input');
+      btnDel.setAttribute('type','button');
+      btnDel.setAttribute('value', 'Delete');
+
+      const upCell = document.createElement('td');
+      row.appendChild(upCell);
+      const btnUp = document.createElement('input');
+      btnUp.setAttribute('type','button');
+      btnUp.setAttribute('value','Update');
+
+      btnUp.onclick = function(){
+        if(confirm("Do you want to overwrite the old data with new data?")){
+          const index = row.rowIndex-1;
+          const model = document.getElementById("model").value;
+          const year = document.getElementById("year").value;
+          const mpg = document.getElementById("mpg").value;
+
+          const newData = {model: model, year: year, mpg: mpg};
+
+          fetch("/update",{
+            method: "PUT",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ index: index, data: newData })
+          })
+                  .then(response => {
+                    if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                    }
+                    console.log('Data updated successfully');
+                  })
+                  .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                  });
+        }
+        location.reload();
+      }
+
+      btnDel.onclick=function (){
+        if(confirm("Do you want to delete the data?")){
+          const index = row.rowIndex - 1;
+          fetch("/delete",{
+            method: "DELETE",
+            headers:{'Content-Type': 'application/json'},
+            body: JSON.stringify({ index: index })
+          })
+                  .then(response => {
+                    if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                    }
+                    console.log('Data deleted successfully');
+                  })
+                  .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                  });
+          }
+        this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+        }
+
+      delCell.appendChild(btnDel);
+      upCell.appendChild(btnUp);
+      return row;
+    }
+    await new Promise(resolve => setTimeout(resolve,1000));
+  }
+</script>
+</div>
+</body>
+</html>

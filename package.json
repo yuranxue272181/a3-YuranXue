@@ -1,0 +1,13 @@
+{
+  "name": "Car Club",
+  "version": "1.0.0",
+  "description": "Welcome to our Car Club",
+  "author": "Yuran Xue",
+  "scripts": {
+    "start": "node server.improved.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mime": "^2.6.0"
+  }
+}
