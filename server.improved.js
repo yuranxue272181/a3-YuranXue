@@ -27,38 +27,56 @@ app.get('/result', (req, res) => {
     res.end(JSON.stringify(appdata))
 });
 
-///submit name
+//Will use database to redo it
 const names = [];
-const middleware_post = (req, res, next ) => {
+
+app.use(express.json())
+app.use(express.static('public'));
+
+///submit name
+app.post('/submit', (req, res) => {
     let dataString = '';
 
-    req.on('data', function(data){
+    req.on('data', function (data) {
         dataString += data;
     })
-    req.on('end', function (){
+    req.on('end', function () {
         const json = JSON.parse(dataString)
         names.push(json)
         req.json = JSON.stringify(names)
-        next();
-    })
-}
-
-app.use(middleware_post);
-
-app.post('/submit', (req, res) => {
-    res.writeHead( 200, { 'Content-Type': 'application/json'})
-    res.end( req.json )
-    console.log(names);
+        res.writeHead(200, {'Content-Type': 'application/json'})
+        console.log(names);
+        res.end(req.json)
+    });
 });
 
-app.put('/', (req, res) => {
-    res.send('Hello World!');
+//add data
+app.post('/add',(req,res) => {
+    const newData = req.body;
+    appdata.push(newData);
+    console.log(appdata);
+    res.json({ message: 'Data added successfully', data: newData });
 });
-app.delete('/', (req, res) => {
-    res.send('Hello World!');
+
+
+app.put('/update/:id', (req, res) => {
+    const indexToUPdate = req.params.id;
+    const inputData = req.body;
+    console.log(req.params.id);
+    console.log(req.body)
+    if(indexToUPdate>= 0 && indexToUPdate < appdata.length) {
+        appdata[indexToUPdate] = inputData;
+        const currentYear = new Date().getFullYear();
+        appdata[indexToUPdate].age = currentYear - appdata[indexToUPdate].year;
+    }
 });
-app.patch('/', (req, res) => {
-    res.send('Hello World!');
+
+app.delete('/delete', (req, res) => {
+    const indexToDelete = req.body.index;
+    if(indexToDelete>= 0 && indexToDelete < appdata.length) {
+        appdata.splice(indexToDelete,1);
+    }
 });
+
 
 app.listen(3000);

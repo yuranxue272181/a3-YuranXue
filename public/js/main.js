@@ -15,18 +15,18 @@ const submit = async function( event ) {
     })
     const text = await response.text()
     console.log("text:", text)
-    confirm("Succeed! Thank you for joining us");
+    confirm("Welcome to join us " + input.value + "!");
   }
 }
 
-const add = async function( event ){
-  if(confirm("Do you want to add the data?")){
+const add = async function( event ) {
+  if(confirm("Do you want to add the data? Tips: the age will only show when year is a number")){
     event.preventDefault()
     const model = document.getElementById("model").value;
     const year = document.getElementById("year").value;
     const mpg = document.getElementById("mpg").value;
     const newData = {model: model, year: year, mpg: mpg};
-    fetch("/add",{
+    await fetch("/add", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -35,7 +35,6 @@ const add = async function( event ){
     })
     location.reload();
   }
-
 }
 
 

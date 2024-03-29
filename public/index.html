@@ -59,10 +59,7 @@ const result = async function( ) {
               return response.json()
             }) .then(data =>{
       dataArray = data
-      console.log(dataArray)
     })
-
-
 
 
     const tbody = document.getElementById('tbMain');
@@ -102,54 +99,40 @@ const result = async function( ) {
       btnUp.setAttribute('type','button');
       btnUp.setAttribute('value','Update');
 
-      btnUp.onclick = function(){
-        if(confirm("Do you want to overwrite the old data with new data?")){
-          const index = row.rowIndex-1;
+
+
+      btnUp.onclick = function() {
+        if (confirm("Do you want to overwrite the old data with new data? Tips: the age will only show when year is a number")) {
+          const index = row.rowIndex - 1;
           const model = document.getElementById("model").value;
           const year = document.getElementById("year").value;
           const mpg = document.getElementById("mpg").value;
-
           const newData = {model: model, year: year, mpg: mpg};
-
-          fetch("/update",{
-            method: "PUT",
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ index: index, data: newData })
-          })
-                  .then(response => {
-                    if (!response.ok) {
-                      throw new Error('Network response was not ok');
-                    }
-                    console.log('Data updated successfully');
-                  })
-                  .catch(error => {
-                    console.error('There was a problem with your fetch operation:', error);
-                  });
+          const dataUpdate = async (id, newData) => {
+            await fetch(`/update/${id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(newData)
+            });
+          }
+          dataUpdate(index,newData);
         }
         location.reload();
       }
 
+
       btnDel.onclick=function (){
-        if(confirm("Do you want to delete the data?")){
+        if(confirm("Do you want to delete the data?")) {
           const index = row.rowIndex - 1;
-          fetch("/delete",{
+          fetch("/delete", {
             method: "DELETE",
-            headers:{'Content-Type': 'application/json'},
-            body: JSON.stringify({ index: index })
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({index:index})
           })
-                  .then(response => {
-                    if (!response.ok) {
-                      throw new Error('Network response was not ok');
-                    }
-                    console.log('Data deleted successfully');
-                  })
-                  .catch(error => {
-                    console.error('There was a problem with your fetch operation:', error);
-                  });
-          }
-        this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+        }
+        location.reload();
         }
 
       delCell.appendChild(btnDel);
