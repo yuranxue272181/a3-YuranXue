@@ -46,18 +46,24 @@
   </div>
 <script>
 
+//get table
+let dataArray;
 
-  const result = async function( ) {
+const result = async function( ) {
     event.preventDefault()
-    await fetch( '/public/index.html', {
+    await fetch( '/result', {
       method:"GET",
+      headers:{ 'Content-Type': 'application/json' },
     }).then(
             function(response){
-              return response.text()
-            }) .then(function (data){
-      dataArray = (JSON.parse(data))
+              return response.json()
+            }) .then(data =>{
+      dataArray = data
       console.log(dataArray)
     })
+
+
+
 
     const tbody = document.getElementById('tbMain');
 
