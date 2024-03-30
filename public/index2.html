@@ -49,7 +49,7 @@
     //get table
     let dataArray;
 
-    const result = async function( ) {
+    const result = async function() {
       event.preventDefault()
       await fetch( '/result', {
         method:"GET",
@@ -100,7 +100,7 @@
 
 
 
-        btnUp.onclick = function() {
+        btnUp.onclick = async function() {
           if (confirm("Do you want to overwrite the old data with new data? Tips: the age will only show when year is a number")) {
             const index = row.rowIndex - 1;
             const model = document.getElementById("model").value;
@@ -116,9 +116,10 @@
                 body: JSON.stringify(newData)
               });
             }
-            dataUpdate(index,newData);
+            await dataUpdate(index, newData);
+            location.reload();
           }
-          location.reload();
+
         }
 
 

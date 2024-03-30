@@ -50,11 +50,13 @@ const logout = async function(event) {
 
 
 
+
+
   window.onload = async function () {
     await result();
     const btnAdd = document.getElementById("addCar");
-    btnAdd.onclick = add;
+    btnAdd.onclick = await add;
     const btnLogOut = document.getElementById('logout');
-    btnLogOut.onclick = logout;
+    btnLogOut.onclick = await logout;
   }
 
