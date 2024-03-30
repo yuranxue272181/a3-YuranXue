@@ -19,6 +19,12 @@ const submit = async function( event ) {
   }
 }
 
+const Name = function(event){
+  const username = document.getElementById("username").value;
+  const yourName = document.getElementById("yourUsername");
+  yourName.innerText = username;
+}
+
 const add = async function( event ) {
   if(confirm("Do you want to add the data? Tips: the age will only show when year is a number")){
     event.preventDefault()

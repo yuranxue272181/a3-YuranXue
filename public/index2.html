@@ -13,7 +13,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<h1>Welcome to our Car Club! <button class="backToLogin" id="logout" >Log Out</button></h1>
+<h1>Welcome to our Car Club!
+  <button class="backToLogin" id="logout" >Log Out</button>
+</h1>
 <p>Feel free to join our community by submitting your name!<br>
   Explore our comprehensive table detailing all the vital information about cars. Additionally, you have the power to contribute by posting new car entries, updating existing ones, or even removing outdated information. Share your car details with us and let's enrich our automotive knowledge together!</p>
 <div class = "grid-container" id="left">
@@ -44,7 +46,6 @@
     </table>
   </div>
   <script>
-
     //get table
     let dataArray;
 
@@ -59,7 +60,6 @@
               }) .then(data =>{
         dataArray = data
       })
-
 
       const tbody = document.getElementById('tbMain');
 

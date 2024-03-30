@@ -53,8 +53,6 @@ async function createCollection(collectionName){
 }
 
 
-
-
 app.use( (req,res,next) => {
     if( collection !== null ) {
         next()
@@ -74,19 +72,20 @@ const appdata = [
 
 
 //show the table
-app.get('/result', (req, res) => {
-    const currentYear = new Date().getFullYear();
-    appdata.forEach(item => {
-        item.age = currentYear - item.year;
-    });
+app.get('/result', async (req, res) => {
+    const cursor = collection.find({}, {projection: {_id: 0, model: 1, year: 1, mpg: 1, age: 1}});
+    const data = await cursor.toArray();
     res.writeHead(200, {'Content-Type': 'application/json'})
-    res.end(JSON.stringify(appdata))
+    res.end(JSON.stringify(data))
 });
 
+//switch page
 app.post('/popstate',async (req, res) => {
         await switchToAnotherCollection("myCollection0");
 }
 )
+
+//login
 app.post('/login', async (req, res) =>{
     const{username, password} = req.body;
     const user = await collection.findOne({ Username: username, Password:password });
@@ -98,6 +97,7 @@ app.post('/login', async (req, res) =>{
     }
 });
 
+//sign up without OAuth
 app.post('/signup',async (req, res) => {
         const {username, password} = req.body;
     const user = await collection.findOne({ Username: username, Password:password });
@@ -112,27 +112,13 @@ app.post('/signup',async (req, res) => {
     });
 
 //Will use database to redo it
-const names = [];
+
 
 app.use(express.json())
 app.use(express.static('public'));
 
 ///submit name
-app.post('/submit', (req, res) => {
-    let dataString = '';
 
-    req.on('data', function (data) {
-        dataString += data;
-    })
-    req.on('end', function () {
-        const json = JSON.parse(dataString)
-        names.push(json)
-        req.json = JSON.stringify(names)
-        res.writeHead(200, {'Content-Type': 'application/json'})
-        console.log(names);
-        res.end(req.json)
-    });
-});
 
 // add data DB
 app.post('/add',async (req, res) => {
