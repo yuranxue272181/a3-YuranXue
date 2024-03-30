@@ -71,7 +71,7 @@ const appdata = [
 
 
 
-//show the table
+//show data db
 app.get('/result', async (req, res) => {
     const cursor = collection.find({}, {projection: {_id: 0, model: 1, year: 1, mpg: 1, age: 1}});
     const data = await cursor.toArray();
@@ -129,26 +129,47 @@ app.post('/add',async (req, res) => {
     res.json({message: 'Data added successfully', data: newData});
 });
 
-
-app.put('/update/:id', (req, res) => {
+//indo
+app.put('/update/:id', async (req, res) => {
     const indexToUPdate = req.params.id;
     const inputData = req.body;
-    console.log(req.params.id);
-    console.log(req.body)
-    if(indexToUPdate>= 0 && indexToUPdate < appdata.length) {
-        appdata[indexToUPdate] = inputData;
-        const currentYear = new Date().getFullYear();
-        appdata[indexToUPdate].age = currentYear - appdata[indexToUPdate].year;
-    }
+    const currentYear = new Date().getFullYear();
+    const age = currentYear - inputData.year
+    // console.log(req.params.id);
+    // console.log(req.body)
+    // if(indexToUPdate>= 0 && indexToUPdate < appdata.length) {
+    //     appdata[indexToUPdate] = inputData;
+    //     const currentYear = new Date().getFullYear();
+    //     appdata[indexToUPdate].age = currentYear - appdata[indexToUPdate].year;
+    // }
+    const query = {};
+    const options = {skip: indexToUPdate, limit: 1};
+    const result = await collection.findOneAndUpdate(query, {
+        $set: {
+            model: inputData.model,
+            year: inputData.year,
+            mpg: inputData.mpg,
+            age: inputData.age
+        }, options
+    })
+    console.log('Update ', result.value);
 });
 
-app.delete('/delete', (req, res) => {
-    const indexToDelete = req.body.index;
-    if(indexToDelete>= 0 && indexToDelete < appdata.length) {
-        appdata.splice(indexToDelete,1);
-    }
-});
 
+app.delete('/delete', async (req, res) => {
+        const indexToDelete = req.body.index;
+        const document = await collection.find({}).toArray();
+        if(indexToDelete >=0 && indexToDelete < document.length){
+            const documentToDelete = document[indexToDelete];
+            const result = await collection.deleteOne({_id:documentToDelete._id});
+            if (result.deletedCount === 1) {
+                return res.status(200).json({ message: "Document deleted successfully" });
+            } else {
+                return res.status(404).json({ error: "Document not found" });
+            }
+        }else {
+            return res.status(400).json({error: "Index out of bounds"});
+        }});
 
 app.listen(3000);
 
