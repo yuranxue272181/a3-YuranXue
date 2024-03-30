@@ -10,7 +10,12 @@ app.use(express.json() )
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+const passport = require('passport');
+const GitHubStrategy = require('passport-github').Strategy;
+const session = require('express-session');
 
+
+//Database
 //connect to the DB
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -41,7 +46,7 @@ async function run() {
 run();
 
 async function switchToAnotherCollection(collectionName) {
-    await client.connect();
+    //await client.connect();
     collection = client.db('myDB').collection(collectionName);
     console.log("Switch Collection");
 }
@@ -61,15 +66,6 @@ app.use( (req,res,next) => {
     }
 })
 
-const appdata = [
-    { "model": "toyota", "year": 1999, "mpg": 23 },
-    { "model": "honda", "year": 2004, "mpg": 30 },
-    { "model": "ford", "year": 1987, "mpg": 14}
-]
-
-
-
-
 
 //show data db
 app.get('/result', async (req, res) => {
@@ -84,6 +80,74 @@ app.post('/popstate',async (req, res) => {
         await switchToAnotherCollection("myCollection0");
 }
 )
+//________________________________________________________________________________________________
+//passport
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: true }
+}));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+passport.use(new GitHubStrategy({
+    clientID: `${process.env.CLIENTID}`,
+    clientSecret: `${process.env.SECRETS}`,
+    callbackURL: 'http://localhost:3000/auth/github/callback',
+}, async (accessToken, refreshToken, profile, done) => {
+    if (accessToken) {
+        return done(null, profile);
+    } else {
+        return done(new Error('Authentication failed'));
+    }
+
+    return done(null, profile);
+}));
+
+
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
+
+
+passport.deserializeUser((user, done) => {
+    done(null, user);
+});
+
+
+app.get('/auth/github', passport.authenticate('github'));
+
+app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/' }),  async (req, res) => {
+        if (!req.user) {
+            return res.status(401).send('Authentication failed');
+        }else {
+            const user = await collection.findOne({githubID: req.user.id});
+            const db = req.user.id + 'Data'
+            if (!user) {
+                const newData = {githubID: req.user.id, username: req.user.username, db: db};
+                console.log(newData)
+                const result = await collection.insertOne(newData);
+                console.log(result)
+                await createCollection(db);
+                console.log("Create New User")
+            }
+            await switchToAnotherCollection(db)
+            res.redirect('/index2.html');
+        }
+});
+
+
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+
+//________________________________________________________
 
 //login
 app.post('/login', async (req, res) =>{
