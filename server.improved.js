@@ -1,6 +1,19 @@
+require('dotenv').config();
+const express = require('express');
+const bodyParser = require('body-parser');
+const fs   = require( "fs" );
+const dir  = "public/";
+const app = express();
+const path = require('path')
+app.use(express.static("public") )
+app.use(express.json() )
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 //connect to the DB
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://yxue:nIuX2jIKbDMJPq91@cluster0.eox0sof.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -11,21 +24,42 @@ const client = new MongoClient(uri, {
     }
 });
 
+let collection = null
+
 async function run() {
-    try {
-        // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
-        // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-    }
+    await client.connect();
+    collection = client.db('myDB').collection('myCollection0');
+
+    app.get("/docs", async (req, res) => {
+        if (collection !== null) {
+            const docs = await collection.find({}).toArray()
+            res.json(docs)
+        }
+    })
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
 }
-//run().catch(console.dir);
+run();
+
+async function switchToAnotherCollection(collectionName) {
+    await client.connect();
+    console.log("Switch Collection");
+    const collection = client.db('myDB').collection(collectionName);
+    app.get("/docs", async (req, res) => {
+        if (collection !== null) {
+            const docs = await collection.find({}).toArray()
+            res.json(docs)
+        }
+    })
+}
 
 
+app.use( (req,res,next) => {
+    if( collection !== null ) {
+        next()
+    }else{
+        res.status( 503 ).send()
+    }
+})
 
 const appdata = [
     { "model": "toyota", "year": 1999, "mpg": 23 },
@@ -33,15 +67,7 @@ const appdata = [
     { "model": "ford", "year": 1987, "mpg": 14}
 ]
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const fs   = require( "fs" );
-const dir  = "public/";
-const app = express();
-const path = require('path')
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+
 
 
 
@@ -53,6 +79,16 @@ app.get('/result', (req, res) => {
     });
     res.writeHead(200, {'Content-Type': 'application/json'})
     res.end(JSON.stringify(appdata))
+});
+
+app.post('/login', async (req, res) =>{
+    const{username, password} = req.body;
+    const user = await collection.findOne({ Username: username, Password:password });
+    if(user){
+        res.send('Login successful!');
+    } else {
+        res.status(401).send('Unauthorized');
+    }
 });
 
 //Will use database to redo it
@@ -78,12 +114,13 @@ app.post('/submit', (req, res) => {
     });
 });
 
-//add data
-app.post('/add',(req,res) => {
+// add data DB
+app.post('/add',async (req, res) => {
     const newData = req.body;
-    appdata.push(newData);
-    console.log(appdata);
-    res.json({ message: 'Data added successfully', data: newData });
+    const currentYear = new Date().getFullYear();
+    newData.age = (currentYear - newData.year);
+    const result = await collection.insertOne(newData);
+    res.json({message: 'Data added successfully', data: newData});
 });
 
 
@@ -108,3 +145,4 @@ app.delete('/delete', (req, res) => {
 
 
 app.listen(3000);
+
