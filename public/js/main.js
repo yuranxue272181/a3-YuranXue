@@ -38,7 +38,7 @@ const add = async function( event ) {
 }
 
 const logout = async function(event) {
-  window.location.href = '../index.html'
+  window.location.href = '/index.html'
   await fetch('/popstate', {
         method: "POST",
         headers: {
