@@ -43,14 +43,10 @@ run();
 async function switchToAnotherCollection(collectionName) {
     await client.connect();
     console.log("Switch Collection");
-    const collection = client.db('myDB').collection(collectionName);
-    app.get("/docs", async (req, res) => {
-        if (collection !== null) {
-            const docs = await collection.find({}).toArray()
-            res.json(docs)
-        }
-    })
+    collection = client.db('myDB').collection(collectionName);
 }
+
+
 
 
 app.use( (req,res,next) => {
@@ -81,10 +77,15 @@ app.get('/result', (req, res) => {
     res.end(JSON.stringify(appdata))
 });
 
+app.post('/popstate',async (req, res) => {
+        await switchToAnotherCollection("myCollection0");
+}
+)
 app.post('/login', async (req, res) =>{
     const{username, password} = req.body;
     const user = await collection.findOne({ Username: username, Password:password });
     if(user){
+        await switchToAnotherCollection(user.db);
         res.send('Login successful!');
     } else {
         res.status(401).send('Unauthorized');

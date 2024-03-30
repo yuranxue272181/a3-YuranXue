@@ -1,7 +1,7 @@
-.grid-container{
+ .grid-container{
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px
+  gap: 20px;
 }
 #left{
   padding-left: 10px;
@@ -75,9 +75,11 @@ th {
   padding: 8px;
 }
 
-/* 表格内容样式 */
 td {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
+}
+.backToLogin{
+  float: right;
 }

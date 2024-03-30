@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up Page</title>
+  <script src="js/main.js"></script>
+  <link rel="stylesheet" href="css/signUp.css">
+</head>
+<body>
+<div class="signup-container">
+  <h2>Sign Up</h2>
+  <form id="signupForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br><br>
+    <button type="submit">Sign Up</button>
+  </form>
+</div>
+
+<script>
+  document.getElementById("signupForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    const response = await fetch("/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({username, password})
+    });
+
+    if (response.ok) {
+      // 注册成功，可以根据需求执行其他操作，比如跳转到登录界面
+      window.location.href = "/login.html";
+    } else {
+      // 注册失败，弹出提示信息
+      alert("Failed to sign up. Please try again.");
+    }
+  });
+</script>
+</body>
+</html>

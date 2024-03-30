@@ -37,13 +37,23 @@ const add = async function( event ) {
   }
 }
 
+const logout = async function(event) {
+  window.location.href = '../index.html'
+  await fetch('/popstate', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+}
+
 
 
   window.onload = async function () {
     await result();
-    const button1 = document.getElementById("submitBtn");
-    button1.onclick = submit;
     const btnAdd = document.getElementById("addCar");
     btnAdd.onclick = add;
+    const btnLogOut = document.getElementById('logout');
+    btnLogOut.onclick = logout;
   }
 
