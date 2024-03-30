@@ -32,13 +32,11 @@
       },
       body: JSON.stringify({username, password})
     });
-
     if (response.ok) {
-      // 注册成功，可以根据需求执行其他操作，比如跳转到登录界面
-      window.location.href = "/login.html";
+      confirm("Succeed! Please log in.")
+      window.location.href = "/index.html";
     } else {
-      // 注册失败，弹出提示信息
-      alert("Failed to sign up. Please try again.");
+      alert("The user has already existed.");
     }
   });
 </script>

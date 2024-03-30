@@ -42,8 +42,14 @@ run();
 
 async function switchToAnotherCollection(collectionName) {
     await client.connect();
-    console.log("Switch Collection");
     collection = client.db('myDB').collection(collectionName);
+    console.log("Switch Collection");
+}
+
+async function createCollection(collectionName){
+    await client.connect();
+    await client.db('myDB').createCollection(collectionName);
+    console.log("Create New Collection "+ collectionName);
 }
 
 
@@ -91,6 +97,19 @@ app.post('/login', async (req, res) =>{
         res.status(401).send('Unauthorized');
     }
 });
+
+app.post('/signup',async (req, res) => {
+        const {username, password} = req.body;
+    const user = await collection.findOne({ Username: username, Password:password });
+    if(!user){
+        await createCollection(username+'Data');
+        const newData = ({ Username: username, Password:password, db: username+'Data' });
+        const result = await collection.insertOne(newData);
+        res.send('Sign up successful');
+    }else{
+        res.status(401).send('Unauthorized');
+    }
+    });
 
 //Will use database to redo it
 const names = [];
