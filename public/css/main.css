@@ -29,25 +29,20 @@ input{
   border-color: #FFFFFF;
   color:#7cfc00;
 }
-#yourname{
-  margin-top: 6px;
-  background-color: #FFFFFF;
-  color: #808080;
-}
 #model{
   margin-top: 6px;
   margin-bottom: 3px;
   background-color: #FFFFFF;
-  color: #808080;
+  color:black;
 }
 #year{
   margin-bottom: 3px;
   background-color: #FFFFFF;
-  color: #808080;
+  color:black;
 }
 #mpg{
   background-color: #FFFFFF;
-  color: #808080;
+  color:black;
 }
 
 button{
