@@ -148,49 +148,54 @@ app.get('/', (req, res) => {
 
 
 //________________________________________________________
-
-//login
-app.post('/login', async (req, res) =>{
-    const{username, password} = req.body;
-    const user = await collection.findOne({ Username: username, Password:password });
+const middleware_authenticate = async (req, res, next) => {
+    const {username, password} = req.body;
+    const user = await collection.findOne({Username: username, Password: password});
     if(user){
         await switchToAnotherCollection(user.db);
-        res.send('Login successful!');
+        next();
     } else {
         res.status(401).send('Unauthorized');
     }
-});
+}
 
-//sign up without OAuth
-app.post('/signup',async (req, res) => {
-        const {username, password} = req.body;
+const middleware_signup = async (req, res, next) => {
+    const {username, password} = req.body;
     const user = await collection.findOne({ Username: username});
     if(!user){
         await createCollection(username+'Data');
         const newData = ({ Username: username, Password:password, db: username+'Data' });
         const result = await collection.insertOne(newData);
-        res.send('Sign up successful');
+        next();
     }else{
         res.status(401).send('Unauthorized');
     }
+}
+
+
+//login
+app.post('/login', middleware_authenticate, (req, res) =>{
+    res.send('Login successful!');
+});
+
+//sign up without OAuth
+app.post('/signup',middleware_signup, (req, res) => {
+        res.send('Sign up successful');
     });
-
-//Will use database to redo it
-
 
 app.use(express.json())
 app.use(express.static('public'));
 
-///submit name
-
-
-// add data DB
-app.post('/add',async (req, res) => {
+const middleware_add = async (req, res, next) => {
     const newData = req.body;
     const currentYear = new Date().getFullYear();
     newData.age = (currentYear - newData.year);
     const result = await collection.insertOne(newData);
-    res.json({message: 'Data added successfully', data: newData});
+    next();
+}
+// add data DB
+app.post('/add',middleware_add, (req, res) => {
+    res.send('Data added successful');
 });
 
 
