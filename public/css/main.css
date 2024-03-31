@@ -1,4 +1,8 @@
- .grid-container{
+html{
+  zoom:1.5;
+  margin:30px;
+}
+.grid-container{
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
@@ -21,6 +25,7 @@ h1{
   color: #7cfc00;
   font-style: oblique;
   font-family: "Century", sans-serif;
+  margin-bottom: 15px;
 
 }
 
@@ -43,6 +48,10 @@ input{
 #mpg{
   background-color: #FFFFFF;
   color:black;
+}
+.backToLogin{
+  zoom:0.5;
+  margin: 10px;
 }
 
 button{

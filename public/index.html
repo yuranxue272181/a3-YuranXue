@@ -6,7 +6,9 @@
   <meta name="description" content="Yuran Xue">
   <title>Login Page</title>
   <script src="js/main.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="login-container">
@@ -16,9 +18,11 @@
     <input type="text" id="username" name="username" required><br><br>
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required><br><br>
-    <button type="submit">Login</button>
-    <button type="signup" onclick="window.location.href = 'SignUp.html'">Don't have an account? Sign up right now</button>
-    <button type="Github" onclick="window.location.href = 'OAuth.html'">Login with Github Account</button>
+    <button type="submit" class="btn btn-success">Login</button>
+    <button type="signup" class="btn btn-success" onclick="window.location.href = 'SignUp.html'">Do not have an account? Sign up right now</button>
+    <div class="text-center">
+    <a href="/auth/github" >Login with GitHub</a>
+      </div>
   </form>
 </div>
 

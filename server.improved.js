@@ -164,7 +164,7 @@ app.post('/login', async (req, res) =>{
 //sign up without OAuth
 app.post('/signup',async (req, res) => {
         const {username, password} = req.body;
-    const user = await collection.findOne({ Username: username, Password:password });
+    const user = await collection.findOne({ Username: username});
     if(!user){
         await createCollection(username+'Data');
         const newData = ({ Username: username, Password:password, db: username+'Data' });
