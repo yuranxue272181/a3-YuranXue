@@ -1,8 +1,11 @@
 Car Club
 ===
-Glitch Link:
+Tip: Both of the link sometimes timeout, recommend download and use localhost:3000
 
-Vercal Link:
+Glitch Link: https://a3-yuranxue.glitch.me/
+
+Vercal Link: https://a3-yuran-xue.vercel.app/
+
 
 My application serves as a comprehensive platform empowering users to effortlessly update their vehicle information. Throughout the project's development, I encountered various challenges, notably in implementing personalized database entries for diverse user profiles and integrating GitHub authentication seamlessly. Leveraging my familiarity with GitHub's tools and its robust support for authentication, I opted for GitHub authentication.
 
