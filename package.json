@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Welcome to our Car Club",
   "author": "Yuran Xue",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "start": "node server.improved.js"
   },
