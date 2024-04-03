@@ -16,7 +16,7 @@ Moreover, I implemented middleware for key functionalities such as user addition
 Technical Achievements
 ---
 - **Tech Achievement 1**: Login system, Sign up system, and Implement Github authentication with passport.js
-- **Tech Achievement 2**: Host my site on Vercal
+- **Tech Achievement 2**: Host my site on Vercel
 
 Design/Evaluation Achievements
 ---
