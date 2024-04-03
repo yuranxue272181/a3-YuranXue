@@ -97,9 +97,7 @@
         btnUp.setAttribute('type','button');
         btnUp.setAttribute('value','Update');
 
-
-
-        btnUp.onclick = async function() {
+        btnUp.onclick = async function(event){
           if (confirm("Do you want to overwrite the old data with new data? Tips: the age will only show when year is a number")) {
             const index = row.rowIndex - 1;
             const model = document.getElementById("model").value;
@@ -115,23 +113,23 @@
                 body: JSON.stringify(newData)
               });
             }
-            await dataUpdate(index, newData);
-            location.reload();
+            await dataUpdate(index, newData).then(() => {
+              location.reload();
+            })
           }
-
         }
 
-
-        btnDel.onclick=async function () {
+        btnDel.onclick= async function(event){
           if (confirm("Do you want to delete the data?")) {
             const index = row.rowIndex - 1;
             await fetch("/delete", {
               method: "DELETE",
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({index: index})
+            }).then(() => {
+              location.reload();
             })
           }
-          location.reload();
         }
 
         delCell.appendChild(btnDel);

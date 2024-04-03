@@ -33,10 +33,10 @@ const add = async function( event ) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(newData)
-    })
-    location.reload();
-  }
-}
+    }).then(() => {
+      location.reload();
+  })
+}}
 
 const logout = async function(event) {
   window.location.href = '/index.html'
@@ -47,6 +47,8 @@ const logout = async function(event) {
         }
       });
 }
+
+
 
 
 
