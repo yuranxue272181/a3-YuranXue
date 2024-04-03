@@ -1,7 +1,7 @@
 {
   "version": 2,
   "builds": [{
-    "src": "./server.improve.js",
+    "src": "/server.improve.js",
     "use": "@vercel/node"
   }],
   "rewrites": [
