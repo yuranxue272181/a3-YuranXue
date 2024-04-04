@@ -2,7 +2,7 @@ Car Club
 ===
 Tip: Both of the link sometimes timeout, recommend download and use localhost:3000
 
-Glitch Link: https://a3-yuranxue.glitch.me/
+Glitch Link: https://a3-yuran-xue.glitch.me/
 
 Vercal Link: https://a3-yuran-xue.vercel.app/
 
